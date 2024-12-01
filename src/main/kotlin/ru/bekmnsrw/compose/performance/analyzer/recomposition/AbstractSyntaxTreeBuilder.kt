@@ -8,13 +8,13 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_SHORT_NAME
 
 /**
  * @author bekmnsrw
  */
-object AbstractSyntaxTreeBuilder {
-
-    private const val COMPOSABLE_ANNOTATION_SHORT_NAME = "Composable"
+internal object AbstractSyntaxTreeBuilder {
 
     fun buildAST(file: KtFile): List<ComposableNode> {
         val composableFunctions = mutableListOf<ComposableNode>()
@@ -32,11 +32,11 @@ object AbstractSyntaxTreeBuilder {
     }
 
     private fun traverseComposable(function: KtNamedFunction): ComposableNode {
-        val name = function.name ?: ""
-        val parameters = function.valueParameters.map { valueParameter ->
+        val name = function.name.orEmpty()
+        val params = function.valueParameters.map { valueParam ->
             ComposableParameter(
-                name = valueParameter.nameAsName?.asString() ?: "",
-                type = valueParameter.typeReference?.text ?: "",
+                ktParameter = valueParam,
+                stability = Unknown,
             )
         }
 
@@ -57,9 +57,9 @@ object AbstractSyntaxTreeBuilder {
                         val nestedNode = traverseComposable(resolvedFunction).copy(
                             parameters = resolvedFunction.valueParameters.map { param ->
                                 ComposableParameter(
-                                    name = param.nameAsName?.asString() ?: "",
-                                    type = param.typeReference?.text ?: "",
-                                    passedValue = argumentMap[param.nameAsName?.asString()]
+                                    ktParameter = param,
+                                    passedValue = argumentMap[param.nameAsName?.asString()],
+                                    stability = Unknown,
                                 )
                             }
                         )
@@ -70,7 +70,7 @@ object AbstractSyntaxTreeBuilder {
 
         return ComposableNode(
             name = name,
-            parameters = parameters,
+            parameters = params,
             nestedNodes = nestedComposables,
         )
     }
@@ -83,10 +83,10 @@ object AbstractSyntaxTreeBuilder {
 
         val arguments = callExpression.valueArguments
 
-        resolvedFunction.valueParameters.forEachIndexed { index, parameter ->
+        resolvedFunction.valueParameters.forEachIndexed { index, param ->
             val argument = arguments.getOrNull(index)
             val passedValue = argument?.getArgumentExpression()?.text
-            argumentMap[parameter.nameAsName?.asString() ?: ""] = passedValue
+            argumentMap[param.nameAsName?.asString().orEmpty()] = passedValue
         }
 
         return argumentMap
@@ -94,7 +94,7 @@ object AbstractSyntaxTreeBuilder {
 
     private fun KtNamedFunction.isComposable(): Boolean {
         return annotationEntries.any { annotation ->
-            annotation.shortName?.asString() == COMPOSABLE_ANNOTATION_SHORT_NAME
+            annotation.shortName?.asString() == COMPOSABLE_SHORT_NAME
         }
     }
 }

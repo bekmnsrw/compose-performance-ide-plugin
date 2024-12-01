@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * @author bekmnsrw
  */
-class AbstractSyntaxTreeBuilderTest : LightJavaCodeInsightFixtureTestCase() {
+internal class AbstractSyntaxTreeBuilderTest : LightJavaCodeInsightFixtureTestCase() {
 
     fun testBuildAST() {
         val psiFile = myFixture.configureByText(
@@ -22,38 +22,32 @@ class AbstractSyntaxTreeBuilderTest : LightJavaCodeInsightFixtureTestCase() {
 
     private companion object {
 
-        const val MOCKED_FILE_NAME = "Test.kt"
+        const val MOCKED_FILE_NAME = "BuildAST.kt"
 
         const val MOCKED_FILE_TEXT = """
             @Composable
-                fun C1(p1: String, p2: Int, p3: List<String>) {
-                    C2(p1 = {})
-                    R1()
-                }
+            fun C1(p1: String, p2: Int, p3: List<String>) {
+                C2(p1 = {})
+                R1()
+            }
                 
-                @Composable
-                fun C2(p1: () -> Unit) {
-                    C3()
-                }
+            @Composable
+            fun C2(p1: () -> Unit) {
+                C3()
+            }
                 
-                @Composable
-                fun C3() {
-                    C4(listOf<Int>(1, 2, 3))
-                }
+            @Composable
+            fun C3() {
+                C4(listOf<Int>(1, 2, 3))
+            }
                 
-                @Composable
-                fun C4(p1: List<Int>) {
+            @Composable
+            fun C4(p1: List<Int>) {}
                 
-                }
+            fun R1() {}
                 
-                fun R1() {
-                
-                }
-                
-                @Composable
-                fun C5() {
-                
-                }
+            @Composable
+            fun C5() {}
         """
     }
 }

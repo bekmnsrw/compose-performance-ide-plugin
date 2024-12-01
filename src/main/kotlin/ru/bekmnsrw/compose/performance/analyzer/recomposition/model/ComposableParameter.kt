@@ -1,10 +1,12 @@
 package ru.bekmnsrw.compose.performance.analyzer.recomposition.model
 
+import org.jetbrains.kotlin.psi.KtParameter
+
 /**
  * @author bekmnsrw
  */
-data class ComposableParameter(
-    val name: String,
-    val type: String,
+internal data class ComposableParameter(
+    val ktParameter: KtParameter,
+    val stability: Stability,
     val passedValue: String? = null,
 )
