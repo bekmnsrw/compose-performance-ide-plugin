@@ -14,6 +14,7 @@ internal object Constants {
 
     const val COMPOSABLE_FUNCTION = "$COMPOSE_ROOT.internal.ComposableFunction"
     const val COMPOSABLE_SHORT_NAME = "Composable"
+    const val STATE = "state"
 
     val STABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Stable")
     val IMMUTABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Immutable")

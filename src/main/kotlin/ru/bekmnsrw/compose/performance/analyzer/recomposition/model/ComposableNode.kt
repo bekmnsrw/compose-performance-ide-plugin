@@ -7,4 +7,5 @@ internal data class ComposableNode(
     val name: String,
     val parameters: List<ComposableParameter>,
     val nestedNodes: List<ComposableNode>,
+    val isRoot: Boolean,
 )

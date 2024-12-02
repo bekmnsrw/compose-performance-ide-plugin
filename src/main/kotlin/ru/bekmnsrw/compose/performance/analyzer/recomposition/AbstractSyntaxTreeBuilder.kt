@@ -2,10 +2,11 @@ package ru.bekmnsrw.compose.performance.analyzer.recomposition
 
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.nj2k.postProcessing.resolve
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.collectStateUsages
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.containsStateAsParam
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.containsStateProperty
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.isState
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
@@ -33,10 +34,13 @@ internal object AbstractSyntaxTreeBuilder {
 
     private fun traverseComposable(function: KtNamedFunction): ComposableNode {
         val name = function.name.orEmpty()
+        val body = function.bodyExpression
         val params = function.valueParameters.map { valueParam ->
             ComposableParameter(
                 ktParameter = valueParam,
                 stability = Unknown,
+                isState = valueParam.isState(),
+                stateUsages = function.collectStateUsages(),
             )
         }
 
@@ -60,6 +64,8 @@ internal object AbstractSyntaxTreeBuilder {
                                     ktParameter = param,
                                     passedValue = argumentMap[param.nameAsName?.asString()],
                                     stability = Unknown,
+                                    isState = param.isState(),
+                                    stateUsages = function.collectStateUsages(),
                                 )
                             }
                         )
@@ -72,6 +78,7 @@ internal object AbstractSyntaxTreeBuilder {
             name = name,
             parameters = params,
             nestedNodes = nestedComposables,
+            isRoot = !params.containsStateAsParam() && body.containsStateProperty(),
         )
     }
 
