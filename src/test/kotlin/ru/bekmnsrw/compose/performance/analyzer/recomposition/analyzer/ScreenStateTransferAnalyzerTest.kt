@@ -1,7 +1,8 @@
-package ru.bekmnsrw.compose.performance.analyzer.recomposition
+package ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer
 
 import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.psi.KtFile
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ast.AbstractSyntaxTreeBuilder
 
 /**
  * @author bekmnsrw

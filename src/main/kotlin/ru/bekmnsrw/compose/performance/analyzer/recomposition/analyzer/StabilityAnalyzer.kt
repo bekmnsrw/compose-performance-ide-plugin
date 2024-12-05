@@ -1,4 +1,4 @@
-package ru.bekmnsrw.compose.performance.analyzer.recomposition
+package ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer
 
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.isFunctionType

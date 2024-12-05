@@ -1,12 +1,12 @@
-package ru.bekmnsrw.compose.performance.analyzer.recomposition
+package ru.bekmnsrw.compose.performance.analyzer.recomposition.ast
 
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.nj2k.postProcessing.resolve
 import org.jetbrains.kotlin.psi.*
-import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.collectStateUsages
-import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.containsStateAsParam
-import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.containsStateProperty
-import ru.bekmnsrw.compose.performance.analyzer.recomposition.ScreenStateTransferAnalyzer.isState
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.collectStateUsages
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.containsStateAsParam
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.containsStateProperty
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.isState
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*

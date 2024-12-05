@@ -4,11 +4,13 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.StabilityAnalyzer
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.ast.AbstractSyntaxTreeBuilder
 
 /**
  * @author bekmnsrw
  */
-internal class UnstableTypesAnalyzer : Annotator {
+internal class RecompositionAnnotator : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val composables = AbstractSyntaxTreeBuilder.buildAST(element as KtFile)

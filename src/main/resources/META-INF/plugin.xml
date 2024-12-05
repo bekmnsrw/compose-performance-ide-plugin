@@ -8,6 +8,6 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="kotlin" implementationClass="ru.bekmnsrw.compose.performance.analyzer.recomposition.UnstableTypesAnalyzer"/>
+        <annotator language="kotlin" implementationClass="ru.bekmnsrw.compose.performance.analyzer.recomposition.RecompositionAnnotator"/>
     </extensions>
 </idea-plugin>
