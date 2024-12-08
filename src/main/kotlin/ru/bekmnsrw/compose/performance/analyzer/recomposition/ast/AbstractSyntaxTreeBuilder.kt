@@ -1,7 +1,9 @@
 package ru.bekmnsrw.compose.performance.analyzer.recomposition.ast
 
 import com.intellij.psi.util.PsiTreeUtil
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.nj2k.postProcessing.resolve
+import org.jetbrains.kotlin.nj2k.types.typeFqName
 import org.jetbrains.kotlin.psi.*
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.collectStateUsages
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenStateTransferAnalyzer.containsStateAsParam
@@ -10,7 +12,9 @@ import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.ScreenSta
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COLON
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_SHORT_NAME
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.DOT
 
 /**
  * @author bekmnsrw
@@ -37,6 +41,9 @@ internal object AbstractSyntaxTreeBuilder {
         val body = function.bodyExpression
         val params = function.valueParameters.map { valueParam ->
             ComposableParameter(
+                name = valueParam.name.toString(),
+                typeName = retrieveParamName(valueParam.typeFqName()),
+                typeValue = retrieveParamType(valueParam.text),
                 ktParameter = valueParam,
                 stability = Unknown,
                 isState = valueParam.isState(),
@@ -61,6 +68,9 @@ internal object AbstractSyntaxTreeBuilder {
                         val nestedNode = traverseComposable(resolvedFunction).copy(
                             parameters = resolvedFunction.valueParameters.map { param ->
                                 ComposableParameter(
+                                    name = param.name.toString(),
+                                    typeName = retrieveParamName(param.typeFqName()),
+                                    typeValue = retrieveParamType(param.text),
                                     ktParameter = param,
                                     passedValue = argumentMap[param.nameAsName?.asString()],
                                     stability = Unknown,
@@ -75,6 +85,7 @@ internal object AbstractSyntaxTreeBuilder {
             }
 
         return ComposableNode(
+            ktNamedFunction = function,
             name = name,
             parameters = params,
             nestedNodes = nestedComposables,
@@ -103,5 +114,16 @@ internal object AbstractSyntaxTreeBuilder {
         return annotationEntries.any { annotation ->
             annotation.shortName?.asString() == COMPOSABLE_SHORT_NAME
         }
+    }
+
+    private fun retrieveParamName(fqName: FqName?): String {
+        return fqName?.asString().orEmpty().split(DOT).last()
+    }
+
+    private fun retrieveParamType(text: String): String {
+        return text.substring(
+            startIndex = text.indexOf(COLON) + 2,
+            endIndex = text.length,
+        )
     }
 }

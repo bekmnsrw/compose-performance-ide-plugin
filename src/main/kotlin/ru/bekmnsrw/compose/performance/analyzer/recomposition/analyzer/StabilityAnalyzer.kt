@@ -72,7 +72,7 @@ internal object StabilityAnalyzer {
 
                 val propertyStability = when {
                     member.type.isCollection() -> checkCollectionStability(member.type)
-                    member.isVar && !member.isDelegated -> Unstable("`${declaration.name}` contains non-delegated var `${member.name}`")
+                    member.isVar && !member.isDelegated -> Unstable.UnstableParam("`${member.name}` is non-delegated var")
                     else -> stabilityOf(member.type)
                 }
 
@@ -82,7 +82,7 @@ internal object StabilityAnalyzer {
             }
         }
 
-        return if (unstableProperties.isEmpty()) Stable else Unstable(unstableProperties.joinToString("; "))
+        return if (unstableProperties.isEmpty()) Stable else Unstable.UnstableParam(unstableProperties.joinToString("; "))
     }
 
     private fun checkCollectionStability(kotlinType: KotlinType): Stability {
@@ -91,9 +91,9 @@ internal object StabilityAnalyzer {
 
         return when {
             isStableCollection && unstableArgs.isEmpty() -> Stable
-            !isStableCollection && unstableArgs.isNotEmpty() -> Unstable("`${kotlinType.fqName}` is unstable and has unstable type parameter: $unstableArgs")
-            !isStableCollection -> Unstable("`${kotlinType.fqName}` is unstable")
-            unstableArgs.isNotEmpty() -> Unstable(unstableArgs)
+            !isStableCollection && unstableArgs.isNotEmpty() -> Unstable.UnstableParam("`${kotlinType.fqName}` is unstable and has unstable type parameter: $unstableArgs")
+            !isStableCollection -> Unstable.UnstableParam("`${kotlinType.fqName}` is unstable")
+            unstableArgs.isNotEmpty() -> Unstable.UnstableParam(unstableArgs)
             else -> Unknown
         }
     }
@@ -124,7 +124,7 @@ internal object StabilityAnalyzer {
 
     private fun checkLambdaStability(kotlinType: KotlinType): Stability {
         val unstableArgs = checkArgumentStability(kotlinType.arguments)
-        return if (unstableArgs.isEmpty()) Stable else Unstable(unstableArgs)
+        return if (unstableArgs.isEmpty()) Stable else Unstable.UnstableParam(unstableArgs)
     }
 
     private fun Annotations.hasAnyAnnotation(annotationFqNames: List<FqName>): Boolean {
