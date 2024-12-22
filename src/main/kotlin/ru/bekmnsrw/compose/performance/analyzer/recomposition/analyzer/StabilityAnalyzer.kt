@@ -22,6 +22,7 @@ import org.jetbrains.kotlinx.serialization.compiler.resolve.toClassDescriptor
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Unstable.*
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_FUNCTION
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.IMMUTABLE_FQ_NAME
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STABLE_COLLECTIONS
@@ -43,7 +44,7 @@ internal object StabilityAnalyzer {
         }
     }
 
-    private fun stabilityOf(kotlinType: KotlinType): Stability = when {
+    fun stabilityOf(kotlinType: KotlinType): Stability = when {
         KotlinBuiltIns.isPrimitiveType(kotlinType) ||
                 kotlinType.isSyntheticComposableFunction() ||
                 kotlinType.isEnum() ||
@@ -72,7 +73,7 @@ internal object StabilityAnalyzer {
 
                 val propertyStability = when {
                     member.type.isCollection() -> checkCollectionStability(member.type)
-                    member.isVar && !member.isDelegated -> Unstable.UnstableParam("`${member.name}` is non-delegated var")
+                    member.isVar && !member.isDelegated -> UnstableParam("`${member.name}` is non-delegated var")
                     else -> stabilityOf(member.type)
                 }
 
@@ -82,7 +83,7 @@ internal object StabilityAnalyzer {
             }
         }
 
-        return if (unstableProperties.isEmpty()) Stable else Unstable.UnstableParam(unstableProperties.joinToString("; "))
+        return if (unstableProperties.isEmpty()) Stable else UnstableParam(unstableProperties.joinToString("; "))
     }
 
     private fun checkCollectionStability(kotlinType: KotlinType): Stability {
@@ -91,9 +92,9 @@ internal object StabilityAnalyzer {
 
         return when {
             isStableCollection && unstableArgs.isEmpty() -> Stable
-            !isStableCollection && unstableArgs.isNotEmpty() -> Unstable.UnstableParam("`${kotlinType.fqName}` is unstable and has unstable type parameter: $unstableArgs")
-            !isStableCollection -> Unstable.UnstableParam("`${kotlinType.fqName}` is unstable")
-            unstableArgs.isNotEmpty() -> Unstable.UnstableParam(unstableArgs)
+            !isStableCollection && unstableArgs.isNotEmpty() -> UnstableCollection("`${kotlinType.fqName}` is unstable and has unstable type parameter: $unstableArgs")
+            !isStableCollection -> UnstableCollection("`${kotlinType.fqName}` is unstable")
+            unstableArgs.isNotEmpty() -> UnstableParam(unstableArgs)
             else -> Unknown
         }
     }
@@ -124,7 +125,7 @@ internal object StabilityAnalyzer {
 
     private fun checkLambdaStability(kotlinType: KotlinType): Stability {
         val unstableArgs = checkArgumentStability(kotlinType.arguments)
-        return if (unstableArgs.isEmpty()) Stable else Unstable.UnstableParam(unstableArgs)
+        return if (unstableArgs.isEmpty()) Stable else UnstableParam(unstableArgs)
     }
 
     private fun Annotations.hasAnyAnnotation(annotationFqNames: List<FqName>): Boolean {

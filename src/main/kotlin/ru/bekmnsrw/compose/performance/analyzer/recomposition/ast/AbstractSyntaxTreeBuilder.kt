@@ -14,7 +14,7 @@ import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposablePa
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COLON
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_SHORT_NAME
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.DOT
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.PERIOD
 
 /**
  * @author bekmnsrw
@@ -117,7 +117,7 @@ internal object AbstractSyntaxTreeBuilder {
     }
 
     private fun retrieveParamName(fqName: FqName?): String {
-        return fqName?.asString().orEmpty().split(DOT).last()
+        return fqName?.asString().orEmpty().split(PERIOD).last()
     }
 
     private fun retrieveParamType(text: String): String {

@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.LambdaAnalyzer
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer.StabilityAnalyzer
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.ast.AbstractSyntaxTreeBuilder
+import ru.bekmnsrw.compose.performance.analyzer.recomposition.intention.FixStabilityIntention
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Unstable
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.EXPLICIT_GROUPS_COMPOSABLE_FQ_NAME
@@ -43,6 +44,18 @@ internal class RecompositionAnnotator : Annotator {
         val ast = AbstractSyntaxTreeBuilder.buildAST(element as KtFile)
         val composablesWithStability = StabilityAnalyzer.checkParamsStability(ast)
         val fullyAnalyzedComposables = LambdaAnalyzer.checkLambdaInvocation(composablesWithStability)
+//        val a = ScreenStateTransferAnalyzer.checkScreenStateTransfer(fullyAnalyzedComposables)
+//        a.forEach {
+//            println(it)
+//        }
+//        fullyAnalyzedComposables.forEach {
+//            it.parameters.forEach { a ->
+//                println(a.stateUsages)
+//                println("-----")
+//            }
+//        }
+//
+//        StateParameterReducer.reduceStateParameters(element as KtFile)
 
         fullyAnalyzedComposables.forEach { composable ->
             showMessage(holder, composable)
@@ -89,7 +102,7 @@ internal class RecompositionAnnotator : Annotator {
                     .forEach { parameter ->
                         holder.newAnnotation(HighlightSeverity.ERROR, "Parameter '${parameter.name} : ${parameter.typeValue}' is unstable. Reason: ${(parameter.stability as Unstable).reason}")
                             .range(parameter.ktParameter.originalElement)
-                            .withFix(intentionAction)
+                            .withFix(FixStabilityIntention(parameter, node))
                             .create()
                     }
             }

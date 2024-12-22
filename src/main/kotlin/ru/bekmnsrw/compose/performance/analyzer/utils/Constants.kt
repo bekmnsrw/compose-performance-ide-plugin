@@ -32,6 +32,10 @@ internal object Constants {
     /**
      * Stable Collections
      */
+    const val PERSISTENT_LIST_IMPORT = "$COLLECTIONS_IMMUTABLE_ROOT.PersistentList"
+    const val PERSISTENT_MAP_IMPORT = "$COLLECTIONS_IMMUTABLE_ROOT.PersistentMap"
+    const val PERSISTENT_SET_IMPORT = "$COLLECTIONS_IMMUTABLE_ROOT.PersistentSet"
+
     val STABLE_COLLECTIONS = listOf(
         "$GOOGLE_COLLECT_ROOT.ImmutableEnumMap",
         "$GOOGLE_COLLECT_ROOT.ImmutableEnumSet",
@@ -44,15 +48,15 @@ internal object Constants {
         "$COLLECTIONS_IMMUTABLE_ROOT.ImmutableMap",
         "$COLLECTIONS_IMMUTABLE_ROOT.ImmutableSet",
         "$COLLECTIONS_IMMUTABLE_ROOT.PersistentCollection",
-        "$COLLECTIONS_IMMUTABLE_ROOT.PersistentList",
-        "$COLLECTIONS_IMMUTABLE_ROOT.PersistentMap",
-        "$COLLECTIONS_IMMUTABLE_ROOT.PersistentSet",
         "$COLLECTIONS_IMMUTABLE_ROOT.immutableListOf",
         "$COLLECTIONS_IMMUTABLE_ROOT.immutableMapOf",
         "$COLLECTIONS_IMMUTABLE_ROOT.immutableSetOf",
         "$COLLECTIONS_IMMUTABLE_ROOT.persistentListOf",
         "$COLLECTIONS_IMMUTABLE_ROOT.persistentMapOf",
         "$COLLECTIONS_IMMUTABLE_ROOT.persistentSetOf",
+        PERSISTENT_LIST_IMPORT,
+        PERSISTENT_MAP_IMPORT,
+        PERSISTENT_SET_IMPORT,
     )
 
     /**
@@ -65,10 +69,18 @@ internal object Constants {
     const val NON_SKIPPABLE_COMPOSABLE_WARNING_MESSAGE = "Remove unused @Suppress"
     const val STATE = "state"
     const val COLON = ":"
-    const val DOT = "."
+    const val PERIOD = "."
     const val FUNCTION_TYPE = "Function"
     const val LEFT_CURLY_BRACE = "{"
     const val RIGHT_CURLY_BRACE = "}"
     const val METHOD_REFERENCE = "::"
     const val REMEMBER = "remember"
+    const val LEFT_PARENTHESIS = "("
+    const val RIGHT_PARENTHESIS = ")"
+    const val RIGHT_ARROW = "->"
+    const val LIST = "List"
+    const val MAP = "Map"
+    const val SET = "Set"
+    const val GREATER_THAN = ">"
+    const val LESS_THAN = "<"
 }

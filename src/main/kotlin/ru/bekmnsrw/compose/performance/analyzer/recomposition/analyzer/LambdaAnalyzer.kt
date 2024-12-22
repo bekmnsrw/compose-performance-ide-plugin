@@ -19,7 +19,7 @@ internal object LambdaAnalyzer {
             val updatedNestedNodes = composable.nestedNodes.map { nestedComposable ->
                 val updatedParameters = nestedComposable.parameters.map { parameter ->
                     if (parameter.isLambda() && parameter.passedValue != null && parameter.checkAnonymousClass()) {
-                        parameter.copy(stability = Stability.Unstable.AnonymousClass("Anonymous"))
+                        parameter.copy(stability = Stability.Unstable.AnonymousClass("Causes creating of anonymous class"))
                     } else {
                         parameter
                     }
@@ -35,22 +35,32 @@ internal object LambdaAnalyzer {
     }
 
     /**
-     * TODO: Don't do like that!
+     * Don't do like that:
      * onClick = { viewModel.onClick(it) }
      *
-     * TODO: Instead use Method Reference
+     * Instead, use Method Reference:
      * onClick = viewModel::onClick
      *
-     * TODO: or wrap lambda with remember
+     * Or wrap lambda with remember:
      * val onClick: (Int) -> Unit = remember(viewModel) {
      *     { viewModel.onClick(it) }
      * }
      */
     private fun ComposableParameter.checkAnonymousClass(): Boolean {
         return passedValue != null &&
+                passedValue.lambdaIsNotEmpty() &&
                 passedValue.contains(LEFT_CURLY_BRACE) &&
                 passedValue.contains(RIGHT_CURLY_BRACE) &&
                 !passedValue.contains(METHOD_REFERENCE) &&
                 !passedValue.contains(REMEMBER)
+    }
+
+    private fun String.lambdaIsNotEmpty(): Boolean {
+        return this
+            .trim()
+            .replace(LEFT_CURLY_BRACE, "")
+            .replace(RIGHT_CURLY_BRACE, "")
+            .trim()
+            .isNotBlank()
     }
 }
