@@ -44,6 +44,7 @@ internal class RecompositionAnnotator : Annotator {
         val ast = AbstractSyntaxTreeBuilder.buildAST(element as KtFile)
         val composablesWithStability = StabilityAnalyzer.checkParamsStability(ast)
         val fullyAnalyzedComposables = LambdaAnalyzer.checkLambdaInvocation(composablesWithStability)
+
 //        val a = ScreenStateTransferAnalyzer.checkScreenStateTransfer(fullyAnalyzedComposables)
 //        a.forEach {
 //            println(it)
@@ -64,6 +65,8 @@ internal class RecompositionAnnotator : Annotator {
                 showMessage(holder, nestedNode)
             }
         }
+
+//        ImageSearcher(element).search(ast)
     }
 
     private fun showMessage(

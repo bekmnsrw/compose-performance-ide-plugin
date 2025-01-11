@@ -90,6 +90,7 @@ internal object AbstractSyntaxTreeBuilder {
             parameters = params,
             nestedNodes = nestedComposables,
             isRoot = !params.containsStateAsParam() && body.containsStateProperty(),
+            text = body?.text.orEmpty(),
         )
     }
 

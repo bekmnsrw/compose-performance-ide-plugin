@@ -60,6 +60,25 @@ internal object Constants {
     )
 
     /**
+     * Images
+     */
+    const val IMAGE = "Image"
+    const val ASYNC_IMAGE = "AsyncImage"
+    const val GLIDE_IMAGE = "GlideImage"
+
+    const val ASYNC_IMAGE_PAINTER = "rememberAsyncImagePainter"
+    const val PLACEHOLDER = "placeholder"
+    const val CACHE_POLICY = "cachePolicy"
+    const val CACHE_STRATEGY = "cacheStrategy"
+
+    const val DRAWABLE_RES = "R.drawable."
+    const val DRAWABLE = "drawable"
+    const val MIPMAP_RES = "R.mipmap."
+    const val MIPMAP = "mipmap"
+
+    const val PROJECT_RES_PATH = "app/src/main/res"
+
+    /**
      * Other
      */
     const val FUN = "fun"
