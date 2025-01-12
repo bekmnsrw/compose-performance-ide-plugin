@@ -11,12 +11,28 @@ internal sealed interface ImageType {
     val source: Source
     val isCacheEnabled: Boolean?
     val hasPlaceholder: Boolean?
-    val extension: Extension
-    val resolution: Resolution
 
-    enum class Source {
+    enum class Type {
 
-        LOCAL, REMOTE
+        IMAGE, ASYNC, GLIDE
+    }
+
+    sealed interface Source {
+
+        val extension: Extension
+        val resolution: Resolution
+
+        data class Remote(
+            val url: String,
+            override val extension: Extension,
+            override val resolution: Resolution,
+        ) : Source
+
+        data class Local(
+            val path: String,
+            override val extension: Extension,
+            override val resolution: Resolution,
+        ) : Source
     }
 
     enum class Extension {
@@ -34,8 +50,6 @@ internal sealed interface ImageType {
         override val source: Source,
         override val isCacheEnabled: Boolean?,
         override val hasPlaceholder: Boolean?,
-        override val extension: Extension,
-        override val resolution: Resolution,
     ) : ImageType {
 
         override fun toString(): String {
@@ -43,19 +57,15 @@ internal sealed interface ImageType {
                 source=$source, 
                 isCacheEnabled=$isCacheEnabled, 
                 hasPlaceholder=$hasPlaceholder, 
-                extension=$extension, 
-                resolution=$resolution,
             )""".trimMargin()
         }
     }
 
     data class AsyncImage(
         override val parent: ComposableNode,
-        override val source: Source = Source.REMOTE,
+        override val source: Source,
         override val isCacheEnabled: Boolean,
         override val hasPlaceholder: Boolean,
-        override val extension: Extension,
-        override val resolution: Resolution,
     ) : ImageType {
 
         override fun toString(): String {
@@ -63,19 +73,15 @@ internal sealed interface ImageType {
                 source=$source, 
                 isCacheEnabled=$isCacheEnabled, 
                 hasPlaceholder=$hasPlaceholder,
-                extension=$extension,
-                resolution=$resolution,
             )""".trimMargin()
         }
     }
 
     data class GlideImage(
         override val parent: ComposableNode,
-        override val source: Source = Source.REMOTE,
+        override val source: Source,
         override val isCacheEnabled: Boolean,
         override val hasPlaceholder: Boolean,
-        override val extension: Extension,
-        override val resolution: Resolution,
     ) : ImageType {
 
         override fun toString(): String {
@@ -83,8 +89,6 @@ internal sealed interface ImageType {
                 source=$source, 
                 isCacheEnabled=$isCacheEnabled, 
                 hasPlaceholder=$hasPlaceholder, 
-                extension=$extension,
-                resolution=$resolution,
             )""".trimMargin()
         }
     }
