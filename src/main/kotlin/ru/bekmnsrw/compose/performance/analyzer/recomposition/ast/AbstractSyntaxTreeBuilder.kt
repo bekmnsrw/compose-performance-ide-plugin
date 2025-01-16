@@ -13,7 +13,6 @@ import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNo
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COLON
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_SHORT_NAME
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.PERIOD
 
 /**
@@ -127,4 +126,6 @@ internal object AbstractSyntaxTreeBuilder {
             endIndex = text.length,
         )
     }
+
+    private const val COMPOSABLE_SHORT_NAME = "Composable"
 }

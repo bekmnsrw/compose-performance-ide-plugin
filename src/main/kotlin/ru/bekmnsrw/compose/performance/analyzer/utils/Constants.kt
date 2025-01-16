@@ -19,7 +19,6 @@ internal object Constants {
     /**
      * Annotations
      */
-    const val COMPOSABLE_SHORT_NAME = "Composable"
     const val SUPPRESS = "Suppress"
 
     val EXPLICIT_GROUPS_COMPOSABLE_FQ_NAME = FqName("$COMPOSE_ROOT.ExplicitGroupsComposable")
