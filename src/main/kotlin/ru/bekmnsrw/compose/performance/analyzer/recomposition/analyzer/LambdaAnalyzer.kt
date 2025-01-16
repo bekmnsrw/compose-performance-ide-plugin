@@ -3,10 +3,9 @@ package ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.FUNCTION_TYPE
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.EMPTY_STRING
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LEFT_CURLY_BRACE
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.METHOD_REFERENCE
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.REMEMBER
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.RIGHT_CURLY_BRACE
 
 /**
@@ -19,7 +18,7 @@ internal object LambdaAnalyzer {
             val updatedNestedNodes = composable.nestedNodes.map { nestedComposable ->
                 val updatedParameters = nestedComposable.parameters.map { parameter ->
                     if (parameter.isLambda() && parameter.passedValue != null && parameter.checkAnonymousClass()) {
-                        parameter.copy(stability = Stability.Unstable.AnonymousClass("Causes creating of anonymous class"))
+                        parameter.copy(stability = Stability.Unstable.AnonymousClass(ANONYMOUS_CLASS_REASON))
                     } else {
                         parameter
                     }
@@ -36,15 +35,15 @@ internal object LambdaAnalyzer {
 
     /**
      * Don't do like that:
-     * onClick = { viewModel.onClick(it) }
+     *   onClick = { viewModel.onClick(it) }
      *
      * Instead, use Method Reference:
-     * onClick = viewModel::onClick
+     *   onClick = viewModel::onClick
      *
      * Or wrap lambda with remember:
-     * val onClick: (Int) -> Unit = remember(viewModel) {
-     *     { viewModel.onClick(it) }
-     * }
+     *   val onClick: (Int) -> Unit = remember(viewModel) {
+     *       { viewModel.onClick(it) }
+     *   }
      */
     private fun ComposableParameter.checkAnonymousClass(): Boolean {
         return passedValue != null &&
@@ -58,9 +57,16 @@ internal object LambdaAnalyzer {
     private fun String.lambdaIsNotEmpty(): Boolean {
         return this
             .trim()
-            .replace(LEFT_CURLY_BRACE, "")
-            .replace(RIGHT_CURLY_BRACE, "")
+            .replace(LEFT_CURLY_BRACE, EMPTY_STRING)
+            .replace(RIGHT_CURLY_BRACE, EMPTY_STRING)
             .trim()
             .isNotBlank()
     }
+
+    /**
+     * Constants
+     */
+    private const val ANONYMOUS_CLASS_REASON = "Causes creating of anonymous class"
+    private const val FUNCTION_TYPE = "Function"
+    private const val REMEMBER = "remember"
 }

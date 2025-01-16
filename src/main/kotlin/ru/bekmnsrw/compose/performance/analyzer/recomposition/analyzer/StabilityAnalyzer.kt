@@ -23,10 +23,8 @@ import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNo
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.*
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Unstable.*
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSABLE_FUNCTION
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.IMMUTABLE_FQ_NAME
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.COMPOSE_ROOT
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STABLE_COLLECTIONS
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STABLE_FQ_NAME
 
 /**
 * @author bekmnsrw
@@ -83,7 +81,11 @@ internal object StabilityAnalyzer {
             }
         }
 
-        return if (unstableProperties.isEmpty()) Stable else UnstableParam(unstableProperties.joinToString("; "))
+        return if (unstableProperties.isEmpty()) {
+            Stable
+        } else {
+            UnstableParam(unstableProperties.joinToString("$SEMICOLON "))
+        }
     }
 
     private fun checkCollectionStability(kotlinType: KotlinType): Stability {
@@ -141,4 +143,12 @@ internal object StabilityAnalyzer {
     private fun KotlinType.isSyntheticComposableFunction() = fqName?.asString()
         .orEmpty()
         .startsWith(COMPOSABLE_FUNCTION)
+
+    /**
+     * Constants
+     */
+    private const val COMPOSABLE_FUNCTION = "$COMPOSE_ROOT.internal.ComposableFunction"
+    private const val SEMICOLON = ";"
+    private val IMMUTABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Immutable")
+    private val STABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Stable")
 }

@@ -12,22 +12,20 @@ internal object Constants {
      */
     private const val COLLECTIONS_IMMUTABLE_ROOT = "kotlinx.collections.immutable"
     private const val COMPOSE_PACKAGE_NAME = "androidx.compose"
-    private const val COMPOSE_ROOT = "$COMPOSE_PACKAGE_NAME.runtime"
+    const val COMPOSE_ROOT = "$COMPOSE_PACKAGE_NAME.runtime"
     private const val GOOGLE_COLLECT_ROOT = "com.google.common.collect"
+    const val EMPTY_STRING = ""
 
     /**
      * Annotations
      */
-    const val COMPOSABLE_FQ_NAME = "androidx.compose.runtime.Composable"
-    const val COMPOSABLE_FUNCTION = "$COMPOSE_ROOT.internal.ComposableFunction"
     const val COMPOSABLE_SHORT_NAME = "Composable"
     const val SUPPRESS = "Suppress"
 
     val EXPLICIT_GROUPS_COMPOSABLE_FQ_NAME = FqName("$COMPOSE_ROOT.ExplicitGroupsComposable")
-    val IMMUTABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Immutable")
     val NON_RESTARTABLE_COMPOSABLE_FQ_NAME = FqName("$COMPOSE_ROOT.NonRestartableComposable")
     val NON_SKIPPABLE_COMPOSABLE_FQ_NAME = FqName("$COMPOSE_ROOT.NonSkippableComposable")
-    val STABLE_FQ_NAME = FqName("$COMPOSE_ROOT.Stable")
+
 
     /**
      * Stable Collections
@@ -94,14 +92,11 @@ internal object Constants {
     const val NON_SKIPPABLE_COMPOSABLE_CAMEL_CASE = "NonSkippableComposable"
     const val NON_SKIPPABLE_COMPOSABLE_ERROR_MESSAGE = "Non skippable function, that will lead to unnecessary recompositions. Consider all function arguments to be stable"
     const val NON_SKIPPABLE_COMPOSABLE_WARNING_MESSAGE = "Remove unused @Suppress"
-    const val STATE = "state"
     const val COLON = ":"
     const val PERIOD = "."
-    const val FUNCTION_TYPE = "Function"
     const val LEFT_CURLY_BRACE = "{"
     const val RIGHT_CURLY_BRACE = "}"
     const val METHOD_REFERENCE = "::"
-    const val REMEMBER = "remember"
     const val LEFT_PARENTHESIS = "("
     const val RIGHT_PARENTHESIS = ")"
     const val RIGHT_ARROW = "->"

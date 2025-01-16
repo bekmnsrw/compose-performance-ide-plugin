@@ -3,7 +3,7 @@ package ru.bekmnsrw.compose.performance.analyzer.recomposition.analyzer
 import org.jetbrains.kotlin.psi.*
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STATE
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.EMPTY_STRING
 
 /**
  * @author bekmnsrw
@@ -15,7 +15,7 @@ internal object ScreenStateTransferAnalyzer {
 
         composableNodes.forEach { rootNode ->
             if (rootNode.isRoot) {
-                checkChildNodeScreenStateTransfer(rootNode, "", stateTransferPaths)
+                checkChildNodeScreenStateTransfer(rootNode, EMPTY_STRING, stateTransferPaths)
             }
         }
 
@@ -69,9 +69,13 @@ internal object ScreenStateTransferAnalyzer {
     private fun checkChildNodeScreenStateTransfer(
         node: ComposableNode,
         currentPath: String,
-        stateTransferPaths: MutableList<String>
+        stateTransferPaths: MutableList<String>,
     ) {
         val stateParam = node.parameters.find { it.isState && it.passedValue != null }
+
+        /**
+         * Just for debug purposes
+         */
         val newPath = if (stateParam != null) "$currentPath${node.name} -> " else currentPath
 
         if (stateParam != null && node.nestedNodes.isEmpty()) {
@@ -82,4 +86,9 @@ internal object ScreenStateTransferAnalyzer {
             checkChildNodeScreenStateTransfer(nestedNode, newPath, stateTransferPaths)
         }
     }
+
+    /**
+     * Constants
+     */
+    private const val STATE = "state"
 }
