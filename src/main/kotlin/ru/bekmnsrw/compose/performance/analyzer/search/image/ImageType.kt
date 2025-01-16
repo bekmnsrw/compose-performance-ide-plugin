@@ -1,4 +1,4 @@
-package ru.bekmnsrw.compose.performance.analyzer.search.model
+package ru.bekmnsrw.compose.performance.analyzer.search.image
 
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 

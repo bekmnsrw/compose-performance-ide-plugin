@@ -79,6 +79,14 @@ internal object Constants {
     const val PROJECT_RES_PATH = "app/src/main/res"
 
     /**
+     * Lists
+     */
+    const val COLUMN = "Column"
+    const val ROW = "Row"
+    const val LAZY_COLUMN = "LazyColumn"
+    const val LAZY_ROW = "LazyRow"
+
+    /**
      * Other
      */
     const val FUN = "fun"

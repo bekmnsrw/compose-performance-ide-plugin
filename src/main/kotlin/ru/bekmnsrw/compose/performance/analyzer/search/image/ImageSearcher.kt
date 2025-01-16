@@ -6,8 +6,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.search.kmpSearch
-import ru.bekmnsrw.compose.performance.analyzer.search.model.ImageType
-import ru.bekmnsrw.compose.performance.analyzer.search.model.ImageType.*
+import ru.bekmnsrw.compose.performance.analyzer.search.image.ImageType.*
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.ASYNC_IMAGE
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.ASYNC_IMAGE_PAINTER
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.CACHE_POLICY
@@ -28,9 +27,7 @@ import javax.imageio.ImageIO
 /**
  * @author bekmnsrw
  */
-internal class ImageSearcher(
-    private val ktFile: KtFile,
-) {
+internal class ImageSearcher(private val ktFile: KtFile) {
 
     private val imageReferences: List<Pair<String, String>> by lazy { findImageReferences() }
 

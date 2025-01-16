@@ -67,6 +67,7 @@ internal class RecompositionAnnotator : Annotator {
         }
 
 //        ImageSearcher(element).search(ast)
+//        ListSearcher(element).search(ast)
     }
 
     private fun showMessage(
