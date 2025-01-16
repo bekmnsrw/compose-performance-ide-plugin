@@ -22,12 +22,9 @@ import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposablePa
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Stable
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Unknown
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.Stability.Unstable.*
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.GREATER_THAN
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.EMPTY_STRING
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LEFT_CURLY_BRACE
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LEFT_PARENTHESIS
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LESS_THAN
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LIST
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.MAP
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.METHOD_REFERENCE
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.PERIOD
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.PERSISTENT_LIST_IMPORT
@@ -36,7 +33,6 @@ import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.PERSISTENT_SET_I
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.RIGHT_ARROW
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.RIGHT_CURLY_BRACE
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.RIGHT_PARENTHESIS
-import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.SET
 import ru.bekmnsrw.compose.performance.analyzer.utils.Utils
 
 /**
@@ -47,15 +43,15 @@ internal class FixStabilityIntention(
     private val node: ComposableNode,
 ) : PsiElementBaseIntentionAction(), IntentionAction {
 
-    override fun getFamilyName(): String = "FAMILY NAME"
+    override fun getFamilyName(): String = FAMILY_NAME
 
     override fun getText(): String = when (parameter.stability) {
-        is AnonymousClass -> "Replace lambda with method invocation"
-        is UnstableCollection -> "Replace with stable collection"
-        is UnstableParam -> "Make parameter stable"
-        is StateTransfer -> "StateTransfer"
-        is Unknown -> "Unknown"
-        is Stable -> ""
+        is AnonymousClass -> ANONYMOUS_CLASS_MESSAGE
+        is UnstableCollection -> UNSTABLE_COLLECTION_MESSAGE
+        is UnstableParam -> UNSTABLE_PARAMETER_MESSAGE
+        is StateTransfer -> STATE_TRANSFER_MESSAGE
+        is Unknown -> UNKNOWN_MESSAGE
+        is Stable -> EMPTY_STRING
     }
 
     override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
@@ -116,16 +112,22 @@ internal class FixStabilityIntention(
     private fun formatLambdaExpression(passedValue: String): String {
         val containsRightArrow = if (passedValue.contains(RIGHT_ARROW)) {
             passedValue
-                .removeRange(passedValue.indexOf(LEFT_CURLY_BRACE), passedValue.indexOf(RIGHT_ARROW) + 2)
+                .removeRange(
+                    startIndex = passedValue.indexOf(LEFT_CURLY_BRACE),
+                    endIndex = passedValue.indexOf(RIGHT_ARROW) + 2,
+                )
                 .trim()
         } else {
             passedValue
         }
 
         val formatted = containsRightArrow
-            .removeRange(containsRightArrow.indexOf(LEFT_PARENTHESIS), containsRightArrow.indexOf(RIGHT_PARENTHESIS) + 1)
-            .replace(LEFT_CURLY_BRACE, "")
-            .replace(RIGHT_CURLY_BRACE, "")
+            .removeRange(
+                startIndex = containsRightArrow.indexOf(LEFT_PARENTHESIS),
+                endIndex = containsRightArrow.indexOf(RIGHT_PARENTHESIS) + 1,
+            )
+            .replace(LEFT_CURLY_BRACE, EMPTY_STRING)
+            .replace(RIGHT_CURLY_BRACE, EMPTY_STRING)
             .trim()
 
         return if (formatted.contains(PERIOD)) {
@@ -144,7 +146,7 @@ internal class FixStabilityIntention(
             parameter.typeValue.contains(LIST) -> PERSISTENT_LIST_IMPORT.split(PERIOD).last()
             parameter.typeValue.contains(MAP) -> PERSISTENT_MAP_IMPORT.split(PERIOD).last()
             parameter.typeValue.contains(SET) -> PERSISTENT_SET_IMPORT.split(PERIOD).last()
-            else -> ""
+            else -> EMPTY_STRING
         }
         replaceCollection(ktFile, "$persistentCollection$generic")
     }
@@ -171,7 +173,7 @@ internal class FixStabilityIntention(
                             type.contains(LIST) -> PERSISTENT_LIST_IMPORT
                             type.contains(MAP) -> PERSISTENT_MAP_IMPORT
                             type.contains(SET) -> PERSISTENT_SET_IMPORT
-                            else -> ""
+                            else -> EMPTY_STRING
                         }
                         Utils.addImport(ktPsiFactory, ktFile, import)
                     }
@@ -191,7 +193,7 @@ internal class FixStabilityIntention(
             ktClasses.forEach { ktClass ->
                 if (ktClass.name == parameter.typeName) {
                     ktClass.primaryConstructor?.valueParameters?.forEach {
-                        if (it.text.contains("var")) {
+                        if (it.text.contains(VAR)) {
                             val psiFactory = KtPsiFactory(project)
                             val newParameter = psiFactory.createParameter(
                                 "val ${it.name}: ${it.typeReference?.text} = false,"
@@ -209,7 +211,7 @@ internal class FixStabilityIntention(
                                     valueParameter.type.fqName?.asString()?.contains(LIST) == true -> PERSISTENT_LIST_IMPORT.split(PERIOD).last()
                                     valueParameter.type.fqName?.asString()?.contains(MAP) == true -> PERSISTENT_MAP_IMPORT.split(PERIOD).last()
                                     valueParameter.type.fqName?.asString()?.contains(SET) == true -> PERSISTENT_SET_IMPORT.split(PERIOD).last()
-                                    else -> ""
+                                    else -> EMPTY_STRING
                                 }
 
                                 val parameter = valueParameter.source.getPsi() as? KtParameter ?: return
@@ -229,7 +231,7 @@ internal class FixStabilityIntention(
                                         type.contains(LIST) -> PERSISTENT_LIST_IMPORT
                                         type.contains(MAP) -> PERSISTENT_MAP_IMPORT
                                         type.contains(SET) -> PERSISTENT_SET_IMPORT
-                                        else -> ""
+                                        else -> EMPTY_STRING
                                     }
                                     Utils.addImport(ktPsiFactory, ktFile, import)
                                 }
@@ -253,10 +255,36 @@ internal class FixStabilityIntention(
         baseDir.children.forEach { file ->
             when {
                 file.isDirectory -> kotlinFiles.addAll(collectKotlinFiles(file))
-                file.extension == "kt" -> kotlinFiles.add(file)
+                file.extension == KT_EXTENSION -> kotlinFiles.add(file)
             }
         }
 
         return kotlinFiles
+    }
+
+    private companion object {
+
+        const val FAMILY_NAME = "Stability"
+
+        const val GREATER_THAN = ">"
+        const val KT_EXTENSION = "kt"
+        const val LESS_THAN = "<"
+        const val VAR = "var"
+
+        /**
+         * Collections
+         */
+        const val LIST = "List"
+        const val MAP = "Map"
+        const val SET = "Set"
+
+        /**
+         * Messages
+         */
+        const val ANONYMOUS_CLASS_MESSAGE = "Replace lambda with method invocation"
+        const val UNSTABLE_COLLECTION_MESSAGE = "Replace with stable collection"
+        const val UNSTABLE_PARAMETER_MESSAGE = "Make parameter stable"
+        const val STATE_TRANSFER_MESSAGE = "StateTransfer"
+        const val UNKNOWN_MESSAGE = "Unknown"
     }
 }

@@ -127,5 +127,8 @@ internal object AbstractSyntaxTreeBuilder {
         )
     }
 
+    /**
+     * Constants
+     */
     private const val COMPOSABLE_SHORT_NAME = "Composable"
 }

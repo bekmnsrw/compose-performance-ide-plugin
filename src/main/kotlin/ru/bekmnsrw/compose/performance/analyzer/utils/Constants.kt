@@ -14,7 +14,6 @@ internal object Constants {
     private const val COMPOSE_PACKAGE_NAME = "androidx.compose"
     const val COMPOSE_ROOT = "$COMPOSE_PACKAGE_NAME.runtime"
     private const val GOOGLE_COLLECT_ROOT = "com.google.common.collect"
-    const val EMPTY_STRING = ""
 
     /**
      * Annotations
@@ -96,12 +95,13 @@ internal object Constants {
     const val LEFT_CURLY_BRACE = "{"
     const val RIGHT_CURLY_BRACE = "}"
     const val METHOD_REFERENCE = "::"
+
+    /**
+     * Common
+     */
+    const val STATE = "state"
     const val LEFT_PARENTHESIS = "("
     const val RIGHT_PARENTHESIS = ")"
     const val RIGHT_ARROW = "->"
-    const val LIST = "List"
-    const val MAP = "Map"
-    const val SET = "Set"
-    const val GREATER_THAN = ">"
-    const val LESS_THAN = "<"
+    const val EMPTY_STRING = ""
 }

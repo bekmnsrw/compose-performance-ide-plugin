@@ -1,6 +1,9 @@
 package ru.bekmnsrw.compose.performance.analyzer.recomposition.intention
 
 import org.jetbrains.kotlin.psi.*
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.LEFT_PARENTHESIS
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.RIGHT_PARENTHESIS
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STATE
 
 /**
  * @author bekmnsrw
@@ -32,10 +35,10 @@ object StateParameterReducer {
     ) {
         val factory = KtPsiFactory(function.project)
         val newParameters = usedProperties.joinToString { property ->
-            "${property}: ${stateParameter.typeReference?.text?.removeSuffix("State")}"
+            val stateSuffix = STATE.replaceFirstChar { it.uppercase() }
+            "${property}: ${stateParameter.typeReference?.text?.removeSuffix(stateSuffix)}"
         }
-        val newParameterList = factory.createParameterList("($newParameters)")
-
+        val newParameterList = factory.createParameterList("$LEFT_PARENTHESIS$newParameters$RIGHT_PARENTHESIS")
         function.valueParameterList?.replace(newParameterList)
     }
 
@@ -53,7 +56,7 @@ object StateParameterReducer {
                         "${stateParameter.name}.$property"
                     }
                     val factory = KtPsiFactory(expression.project)
-                    val newArgumentList = factory.createCallArguments("($arguments)")
+                    val newArgumentList = factory.createCallArguments("$LEFT_PARENTHESIS$arguments$RIGHT_PARENTHESIS")
                     expression.valueArgumentList?.replace(newArgumentList)
                 }
             }
@@ -61,7 +64,7 @@ object StateParameterReducer {
     }
 
     private fun KtParameter.isState(): Boolean {
-        return typeReference?.text?.contains("State", ignoreCase = true) == true
+        return typeReference?.text?.contains(STATE, ignoreCase = true) == true
     }
 
     private fun KtNamedFunction.collectStateUsages(): List<String> {
@@ -71,7 +74,7 @@ object StateParameterReducer {
             override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
                 super.visitDotQualifiedExpression(expression)
 
-                if (expression.receiverExpression.text.contains("state")) {
+                if (expression.receiverExpression.text.contains(STATE, ignoreCase = true)) {
                     expression.selectorExpression?.text?.let { stateUsages.add(it) }
                 }
             }

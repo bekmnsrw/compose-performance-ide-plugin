@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.psi.*
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableNode
 import ru.bekmnsrw.compose.performance.analyzer.recomposition.model.ComposableParameter
 import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.EMPTY_STRING
+import ru.bekmnsrw.compose.performance.analyzer.utils.Constants.STATE
 
 /**
  * @author bekmnsrw
@@ -86,9 +87,4 @@ internal object ScreenStateTransferAnalyzer {
             checkChildNodeScreenStateTransfer(nestedNode, newPath, stateTransferPaths)
         }
     }
-
-    /**
-     * Constants
-     */
-    private const val STATE = "state"
 }
