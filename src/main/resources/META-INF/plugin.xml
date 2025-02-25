@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>ru.bekmnsrw.compose-performance-analyzer</id>
+    <id>compose-performance-analyzer</id>
     <name>Compose-Performance-Analyzer</name>
     <vendor email="ilya.bekmansurov@gmail.com">Ilya Bekmansurov</vendor>
     <description><![CDATA[Performance Analyzer for Android applications using Jetpack Compose]]></description>
@@ -8,7 +8,7 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="kotlin" implementationClass="ru.bekmnsrw.compose.performance.analyzer.recomposition.PluginInitializer"/>
-        <annotator language="kotlin" implementationClass="ru.bekmnsrw.compose.performance.analyzer.recomposition.RecompositionAnnotator"/>
+        <annotator language="kotlin" implementationClass="compose.performance.analyzer.plugin.PluginInitializer"/>
+        <annotator language="kotlin" implementationClass="compose.performance.analyzer.plugin.RecompositionAnnotator"/>
     </extensions>
 </idea-plugin>

@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.intellij") version "1.17.4"
 }
 
-group = "ru.bekmnsrw"
+group = "compose.performance.analyzer"
 version = "1.0-SNAPSHOT"
 
 repositories {
