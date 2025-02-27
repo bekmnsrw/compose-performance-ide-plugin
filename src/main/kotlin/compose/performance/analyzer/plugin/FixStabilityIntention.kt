@@ -33,7 +33,8 @@ import compose.performance.analyzer.utils.Constants.PERSISTENT_SET_IMPORT
 import compose.performance.analyzer.utils.Constants.RIGHT_ARROW
 import compose.performance.analyzer.utils.Constants.RIGHT_CURLY_BRACE
 import compose.performance.analyzer.utils.Constants.RIGHT_PARENTHESIS
-import compose.performance.analyzer.utils.Utils
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.resolve.ImportPath
 
 /**
  * @author i.bekmansurov
@@ -175,7 +176,7 @@ internal class FixStabilityIntention(
                             type.contains(SET) -> PERSISTENT_SET_IMPORT
                             else -> EMPTY_STRING
                         }
-                        Utils.addImport(ktPsiFactory, ktFile, import)
+                        addImport(ktPsiFactory, ktFile, import)
                     }
                 }
             }
@@ -233,7 +234,7 @@ internal class FixStabilityIntention(
                                         type.contains(SET) -> PERSISTENT_SET_IMPORT
                                         else -> EMPTY_STRING
                                     }
-                                    Utils.addImport(ktPsiFactory, ktFile, import)
+                                    addImport(ktPsiFactory, ktFile, import)
                                 }
                             }
                             is UnstableParam -> {
@@ -260,6 +261,25 @@ internal class FixStabilityIntention(
         }
 
         return kotlinFiles
+    }
+
+    private fun addImport(ktPsiFactory: KtPsiFactory, ktPsiFile: KtFile, fqName: String) {
+        val isImportExists = ktPsiFile.importList?.imports?.any { ktImportDirective ->
+            ktImportDirective.importedFqName?.asString() == fqName
+        }
+
+        requireNotNull(isImportExists)
+
+        if (isImportExists == false) {
+            ktPsiFile.importList?.add(
+                ktPsiFactory.createImportDirective(
+                    ImportPath(
+                        fqName = FqName(fqName),
+                        isAllUnder = false,
+                    )
+                )
+            )
+        }
     }
 
     private companion object {

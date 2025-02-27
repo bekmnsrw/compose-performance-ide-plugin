@@ -8,7 +8,32 @@
     <depends>org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="kotlin" implementationClass="compose.performance.analyzer.plugin.PluginInitializer"/>
-        <annotator language="kotlin" implementationClass="compose.performance.analyzer.plugin.RecompositionAnnotator"/>
+        <!--    annotator    -->
+        <annotator
+                language="kotlin"
+                implementationClass="compose.performance.analyzer.plugin.PluginInitializer"
+        />
+        <annotator
+                language="kotlin"
+                implementationClass="compose.performance.analyzer.plugin.RecompositionAnnotator"
+        />
+
+        <!--    localInspection    -->
+        <localInspection
+                language="kotlin"
+                displayName="Unoptimized Compose Local Allocation"
+                groupName="Kotlin"
+                enabledByDefault="true"
+                implementationClass="compose.performance.analyzer.dfa.inspection.ComposeLocalAllocationInspection"
+                level="WARNING"
+        />
+        <localInspection
+                language="kotlin"
+                displayName="Unoptimized Top-Level Allocation"
+                groupName="Kotlin"
+                enabledByDefault="true"
+                implementationClass="compose.performance.analyzer.dfa.inspection.TopLevelAllocationInspection"
+                level="WARNING"
+        />
     </extensions>
 </idea-plugin>
