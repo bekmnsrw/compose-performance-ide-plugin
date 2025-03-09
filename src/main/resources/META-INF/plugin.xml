@@ -11,11 +11,11 @@
         <!--    annotator    -->
         <annotator
                 language="kotlin"
-                implementationClass="compose.performance.analyzer.plugin.PluginInitializer"
+                implementationClass="compose.performance.ide.plugin.PluginInitializer"
         />
         <annotator
                 language="kotlin"
-                implementationClass="compose.performance.analyzer.plugin.RecompositionAnnotator"
+                implementationClass="compose.performance.ide.plugin.RecompositionAnnotator"
         />
 
         <!--    localInspection    -->
@@ -24,7 +24,7 @@
                 displayName="Unoptimized Compose Local Allocation"
                 groupName="Kotlin"
                 enabledByDefault="true"
-                implementationClass="compose.performance.analyzer.dfa.inspection.ComposeLocalAllocationInspection"
+                implementationClass="compose.performance.ide.plugin.dfa.inspection.ComposeLocalAllocationInspection"
                 level="WARNING"
         />
         <localInspection
@@ -32,7 +32,7 @@
                 displayName="Unoptimized Top-Level Allocation"
                 groupName="Kotlin"
                 enabledByDefault="true"
-                implementationClass="compose.performance.analyzer.dfa.inspection.TopLevelAllocationInspection"
+                implementationClass="compose.performance.ide.plugin.dfa.inspection.TopLevelAllocationInspection"
                 level="WARNING"
         />
     </extensions>

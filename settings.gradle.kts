@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "compose-performance-analyzer"
+rootProject.name = "compose-performance-ide-plugin"
