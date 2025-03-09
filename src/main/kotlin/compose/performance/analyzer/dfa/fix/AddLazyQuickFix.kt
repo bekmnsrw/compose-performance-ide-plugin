@@ -10,7 +10,9 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
  * @author i.bekmansurov
  */
 internal class AddLazyQuickFix : LocalQuickFix {
+
     override fun getName() = "Добавить by lazy"
+
     override fun getFamilyName() = name
 
     override fun applyFix(project: Project, descriptor: ProblemDescriptor) {

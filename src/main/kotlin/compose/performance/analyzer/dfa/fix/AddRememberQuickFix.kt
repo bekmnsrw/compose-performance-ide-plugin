@@ -12,7 +12,9 @@ import org.jetbrains.kotlin.psi.KtPsiFactory
  * @author i.bekmansurov
  */
 internal class AddRememberQuickFix : LocalQuickFix {
+
     override fun getName() = "Обернуть в remember"
+
     override fun getFamilyName() = name
 
     override fun applyFix(project: Project, descriptor: ProblemDescriptor) {

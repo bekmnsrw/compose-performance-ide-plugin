@@ -5,15 +5,12 @@ plugins {
 }
 
 group = "compose.performance.analyzer"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
 }
 
-/**
- * @see (Configure Gradle IntelliJ Plugin)[https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html]
- */
 intellij {
     version.set("2023.1.1.26")
     type.set("AI")
