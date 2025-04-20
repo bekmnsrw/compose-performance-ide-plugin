@@ -38,6 +38,8 @@ internal class ComposeLocalAllocationInspection : AbstractKotlinInspection() {
     }
 
     private fun KtProperty.isRemembered(): Boolean {
-        return initializer?.text?.startsWith("remember") == true
+        return initializer?.text?.startsWith("remember") == true ||
+                initializer?.text?.contains("viewModel", ignoreCase = true) == true ||
+                initializer?.text == null
     }
 }

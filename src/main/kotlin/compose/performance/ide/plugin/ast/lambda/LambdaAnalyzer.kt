@@ -30,7 +30,7 @@ internal object LambdaAnalyzer {
     }
 
     private fun ComposableParameter.isLambda(): Boolean {
-        return typeName.contains(compose.performance.ide.plugin.ast.lambda.LambdaAnalyzer.FUNCTION_TYPE)
+        return typeName.contains(FUNCTION_TYPE)
     }
 
     /**
@@ -51,7 +51,7 @@ internal object LambdaAnalyzer {
                 passedValue.contains(LEFT_CURLY_BRACE) &&
                 passedValue.contains(RIGHT_CURLY_BRACE) &&
                 !passedValue.contains(METHOD_REFERENCE) &&
-                !passedValue.contains(compose.performance.ide.plugin.ast.lambda.LambdaAnalyzer.REMEMBER)
+                !passedValue.contains(REMEMBER)
     }
 
     private fun String.lambdaIsNotEmpty(): Boolean {

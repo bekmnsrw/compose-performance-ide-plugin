@@ -197,7 +197,7 @@ internal class FixStabilityIntention(
                         if (it.text.contains(VAR)) {
                             val psiFactory = KtPsiFactory(project)
                             val newParameter = psiFactory.createParameter(
-                                "val ${it.name}: ${it.typeReference?.text} = false,"
+                                "val ${it.name}: ${it.typeReference?.text},"
                             )
                             it.replace(newParameter)
                         }
